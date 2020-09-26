@@ -1,5 +1,6 @@
 
 import java.time.LocalDate;
+import java.time.Period;
 
 /**
  * Created by Gulzar Safar on 9/25/2020
@@ -11,8 +12,18 @@ public class Customer {
     private String name;
     private String surName;
     private LocalDate birthDate;
+    private String gender;
+    private int retireAge;
 
     public Customer() {
+    }
+
+
+
+    public Customer(String name, String surName, LocalDate birthDate) {
+        this.name = name;
+        this.surName = surName;
+        this.birthDate = birthDate;
     }
 
     public int getId() {
@@ -22,13 +33,6 @@ public class Customer {
     public void setId(int id) {
         this.id = id;
     }
-
-    public Customer(String name, String surName, LocalDate birthDate) {
-        this.name = name;
-        this.surName = surName;
-        this.birthDate = birthDate;
-    }
-
 
     public String getName() {
         return name;
@@ -50,8 +54,35 @@ public class Customer {
         return birthDate;
     }
 
+    public void setRetireAge(String gender) {
+        if(gender.equals("m")){
+            this.retireAge = 65;
+        }else if (gender.equals("f")){
+            this.retireAge = 63;
+        }
+    }
+
+    public int getRetireAge() {
+        return retireAge;
+    }
+
     public void setBirthDate(LocalDate birthDate) {
         this.birthDate = birthDate;
+    }
+
+    public String  getGender() {
+        return gender;
+    }
+
+    public void setGender(String gender) {
+        this.gender = gender;
+        setRetireAge(gender);
+    }
+
+    public int getRestWorkYear(){
+        LocalDate current = LocalDate.now();
+        int restWorkYear = retireAge - Period.between(birthDate, current).getYears();
+        return restWorkYear;
     }
 
     @Override

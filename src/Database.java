@@ -1,5 +1,3 @@
-import javax.naming.InitialContext;
-import javax.sql.DataSource;
 import java.sql.*;
 
 /**
@@ -20,7 +18,7 @@ public class Database {
         }
     }
 
-    public Connection connect() throws Exception {
+    public Connection connect() {
 
         try {
 
@@ -76,9 +74,7 @@ public class Database {
         return connection;
     }
 
-    public void setConnection(Connection connection) {
-        this.connection = connection;
-    }
+
 
     public PreparedStatement getPs() {
         return ps;
