@@ -1,5 +1,8 @@
 import java.math.BigDecimal;
+import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Gulzar Safar on 9/25/2020
@@ -7,6 +10,8 @@ import java.time.LocalDate;
 
 public class Credit {
 
+
+    private int id;
     private BigDecimal homePrice;
     private BigDecimal initialPayment;
     private BigDecimal creditAmount;
@@ -24,6 +29,7 @@ public class Credit {
 
     public Credit() {
     }
+
     public int getCreditYear() {
         return creditYear;
     }
@@ -36,6 +42,13 @@ public class Credit {
         }
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public BigDecimal getHomePrice() {
         return homePrice;
@@ -53,10 +66,10 @@ public class Credit {
     }
 
     public void setInitialPayment() {
-        if(this.maxCreditAmount.compareTo(this.homePrice) >= 0 ) {
-            this.initialPayment = new BigDecimal(0.00000);
+        if(this.maxCreditAmount.compareTo(homePrice) >= 0 ) {
+            this.initialPayment = BigDecimal.ZERO;
         } else {
-            this.initialPayment = this.homePrice.subtract(this.maxCreditAmount);
+            this.initialPayment = homePrice.subtract(maxCreditAmount);
         }
     }
 
@@ -91,7 +104,6 @@ public class Credit {
         this.interestAmount = interestAmount;
     }
 
-
     public LocalDate getFirstPaymentDate() {
         return firstPaymentDate;
     }
@@ -99,10 +111,10 @@ public class Credit {
     public void setFirstPaymentDate() {
         this.firstPaymentDate = actionDate.plusMonths(1);
     }
+
     public void setFirstPaymentDate(LocalDate firstPaymentDate) {
         this.firstPaymentDate = firstPaymentDate;
     }
-
 
     public LocalDate getLastPaymentDate() {
         return lastPaymentDate;
@@ -111,6 +123,7 @@ public class Credit {
     public void setLastPaymentDate(LocalDate lastPaymentDate) {
         this.lastPaymentDate = lastPaymentDate;
     }
+
     public void setLastPaymentDate() {
         this.lastPaymentDate = firstPaymentDate.plusYears(creditYear);
     }
@@ -138,6 +151,29 @@ public class Credit {
 
     public BigDecimal getMaxCreditAmount() {
         return maxCreditAmount;
+    }
+
+    public List monthlyPaymentPlan(Credit credit, Database database) throws SQLException {
+        List<MonthlyPayment> paymentPlan = new ArrayList<>();
+
+        int nbMonth= 12 * credit.getCreditYear();
+
+        BigDecimal baseAmount = credit.getCreditAmount().divide(BigDecimal.valueOf(nbMonth));
+        BigDecimal interestAmount = credit.getInterestAmount().divide(BigDecimal.valueOf(nbMonth));
+        BigDecimal totalAmount = baseAmount.add(interestAmount);
+
+
+
+        for (int i = 0; i < nbMonth ; i++) {
+
+            MonthlyPayment payment = new MonthlyPayment(DatabaseQueries.getCreditId(credit,database),
+                                        credit.getFirstPaymentDate().plusMonths(i),
+                                        baseAmount, interestAmount, totalAmount);
+
+            paymentPlan.add(payment);
+        }
+
+        return paymentPlan;
     }
 
 

@@ -2,6 +2,7 @@
  *  Created by Gulzar Safar on 9/26/2020
  */
 
+
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,7 +13,6 @@ public class DatabaseQueries {
     public static void insertCustomer(Customer customer, Database database) throws SQLException {
 
         String sql;
-        int count = 0;
 
         sql = "insert into customer (id, name, surname, birth_date) " +
                 " values (customer_seq.nextval, ?, ?, ? )";
@@ -22,7 +22,7 @@ public class DatabaseQueries {
         database.getPs().setString(1, customer.getName());
         database.getPs().setString(2, customer.getSurName());
         database.getPs().setDate(3, Date.valueOf(customer.getBirthDate()));
-        count = database.getPs().executeUpdate();
+        database.getPs().executeUpdate();
         database.getConnection().commit();
 
     }
@@ -31,12 +31,13 @@ public class DatabaseQueries {
 
         String sql;
 
-        sql = "select * from customer ";
+        sql = "select id, name, surname, birth_date from customer ";
 
         database.setPs(database.getConnection().prepareStatement(sql));
         database.setRs(database.getPs().executeQuery());
 
         List<Customer> customers = new ArrayList<>();
+
         while (database.getRs().next()) {
             Customer customer1 = new Customer();
 
@@ -60,12 +61,13 @@ public class DatabaseQueries {
         String sql;
         int customerId = -1;
 
-        sql = "select id from customer where name= ? and surname = ? ";
+        sql = "select id from customer where name= ? and surname = ? and birth_date = ? ";
 
         database.setPs(database.getConnection().prepareStatement(sql));
 
         database.getPs().setString(1, customer.getName());
         database.getPs().setString(2, customer.getSurName());
+        database.getPs().setDate(3,Date.valueOf(customer.getBirthDate()));
 
         database.setRs(database.getPs().executeQuery());
 
@@ -80,7 +82,6 @@ public class DatabaseQueries {
     public static void insertCredit(Customer customer, Credit credit, Database database) throws SQLException {
 
         String sql;
-        int count = 0;
 
         sql = "insert into credit (id, customer_id, home_price, initial_payment, credit_amount, interest_amount,first_payment_date, last_payment_date, action_date)" +
                 " values (CREDIT_SEQ.nextval , ?, ?, ?, ?, ?, ?, ?, ? )";
@@ -90,7 +91,7 @@ public class DatabaseQueries {
 //
         database.setPs(database.getConnection().prepareStatement(sql));
 
-        database.getPs().setInt(1, getCustomerId(customer,database));
+        database.getPs().setInt(1, DatabaseQueries.getCustomerId(customer,database));
         database.getPs().setBigDecimal(2, credit.getHomePrice());
         database.getPs().setBigDecimal(3, credit.getInitialPayment());
         database.getPs().setBigDecimal(4, credit.getCreditAmount());
@@ -100,7 +101,7 @@ public class DatabaseQueries {
         database.getPs().setDate(8, Date.valueOf(credit.getActionDate()));
 
 
-        count = database.getPs().executeUpdate();
+        database.getPs().executeUpdate();
         database.getConnection().commit();
 
     }
@@ -109,7 +110,8 @@ public class DatabaseQueries {
 
         String sql;
 
-        sql = "select * from credit ";
+        sql = "select id, home_price, initial_payment, credit_amount, interest_amount, " +
+                "first_payment_date, last_payment_date, action_date from credit";
 
         database.setPs(database.getConnection().prepareStatement(sql));
         database.setRs(database.getPs().executeQuery());
@@ -118,6 +120,7 @@ public class DatabaseQueries {
         while (database.getRs().next()) {
             Credit credit = new Credit();
 
+            credit.setId(database.getRs().getInt("id"));
             credit.setHomePrice(database.getRs().getBigDecimal("home_price"));
             credit.setInitialPayment(database.getRs().getBigDecimal("initial_payment"));
             credit.setCreditAmount(database.getRs().getBigDecimal("credit_amount"));
@@ -133,6 +136,33 @@ public class DatabaseQueries {
 
             System.out.println(credit);
         }
+    }
+
+    public static  int getCreditId(Credit credit, Database database) throws SQLException {
+        String sql;
+        int customerId = -1;
+
+        sql = "select id from credit where home_price= ? and initial_payment = ? and credit_amount = ? and " +
+                "interest_amount = ? and first_payment_date = ? and last_payment_date = ? " +
+                " and action_date = ?";
+
+        database.setPs(database.getConnection().prepareStatement(sql));
+        database.getPs().setBigDecimal(1, credit.getHomePrice());
+        database.getPs().setBigDecimal(2, credit.getInitialPayment());
+        database.getPs().setBigDecimal(3, credit.getCreditAmount());
+        database.getPs().setBigDecimal(4, credit.getInterestAmount());
+        database.getPs().setDate(5, Date.valueOf(credit.getFirstPaymentDate()));
+        database.getPs().setDate(6, Date.valueOf(credit.getLastPaymentDate()));
+        database.getPs().setDate(7, Date.valueOf(credit.getActionDate()));
+
+        database.setRs(database.getPs().executeQuery());
+
+        if (database.getRs().next()) {
+            customerId = database.getRs().getInt("id");
+            return customerId;
+        }
+        return customerId;
+
     }
 
 

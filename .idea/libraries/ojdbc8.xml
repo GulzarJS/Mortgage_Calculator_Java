@@ -4,6 +4,12 @@
       <root url="jar://$PROJECT_DIR$/../../../../../Program Files/sqldeveloper/jdbc/lib/ojdbc8.jar!/" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/../../../../../Program Files/sqldeveloper/jdbc/lib/ojdbc8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../../../Program Files/sqldeveloper/jdbc/lib/ojdbc8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../../../Program Files/sqldeveloper/jdbc/lib/ojdbc8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../../../Oracle19/jdbc/lib/ojdbc8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/../../../../../Program Files/sqldeveloper/jdbc/lib/ojdbc8.jar!/" />
+    </SOURCES>
   </library>
 </component>
