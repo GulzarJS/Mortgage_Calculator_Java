@@ -4,9 +4,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Gulzar Safar on 9/25/2020
- */
+
 
 public class Credit {
 

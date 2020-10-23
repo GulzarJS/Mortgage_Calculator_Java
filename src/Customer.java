@@ -2,9 +2,7 @@
 import java.time.LocalDate;
 import java.time.Period;
 
-/**
- * Created by Gulzar Safar on 9/25/2020
- */
+
 
 public class Customer {
 

@@ -2,9 +2,7 @@ import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.Scanner;
 
-/**
- * Created by Gulzar Safar on 9/25/2020
- */
+
 
 public class Calculator {
     public static void main(String[] args) {

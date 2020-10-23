@@ -1,8 +1,6 @@
 import java.sql.*;
 
-/**
- * Created by Gulzar Safar on 9/25/2020
- */
+
 
 public class Database {
 

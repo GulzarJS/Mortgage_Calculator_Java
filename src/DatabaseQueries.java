@@ -1,12 +1,10 @@
-/*
- *  Created by Gulzar Safar on 9/26/2020
- */
 
 
 import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class DatabaseQueries {
 
@@ -86,9 +84,6 @@ public class DatabaseQueries {
         sql = "insert into credit (id, customer_id, home_price, initial_payment, credit_amount, interest_amount,first_payment_date, last_payment_date, action_date)" +
                 " values (CREDIT_SEQ.nextval , ?, ?, ?, ?, ?, ?, ?, ? )";
 
-//        insert into credit (id, customer_id, home_price, initial_payment, credit_amount, interest_amount,first_payment_date, last_payment_date, action_date)
-//        values(CREDIT_SEQ.nextval ,23, 200000, 50000, 150000, 12000,to_date('2020-09-26','yyyy-MM-dd' ),to_date('2020-09-26','yyyy-MM-dd' ),to_date('2020-09-26','yyyy-MM-dd' ));
-//
         database.setPs(database.getConnection().prepareStatement(sql));
 
         database.getPs().setInt(1, DatabaseQueries.getCustomerId(customer,database));
@@ -165,5 +160,64 @@ public class DatabaseQueries {
 
     }
 
+
+    public static void insertPaymentPlan(Credit credit, Database database) throws SQLException {
+
+        String sql;
+
+        sql = "insert into monthly_payment (id, credit_id, payment_date , base_amount, interest_amount, total_amount)" +
+                " values (MONTHLY_PAYMENT_SEQ.nextval , ?, ?, ?, ?, ?, ? )";
+
+        List<MonthlyPayment> paymentPlan =  credit.monthlyPaymentPlan(credit, database);
+
+        ListIterator<MonthlyPayment> paymentPlanIterator = paymentPlan.listIterator();
+
+        while(paymentPlanIterator.hasNext()){
+            database.setPs(database.getConnection().prepareStatement(sql));
+
+            database.getPs().setInt(1, DatabaseQueries.getCreditId(credit,database));
+            database.getPs().setDate(2, Date.valueOf(paymentPlanIterator.next().getPaymentDate()));
+            database.getPs().setBigDecimal(3, paymentPlanIterator.next().getBaseAmount());
+            database.getPs().setBigDecimal(4, paymentPlanIterator.next().getInterestAmount());
+            database.getPs().setBigDecimal(5, paymentPlanIterator.next().getTotalAmount());
+
+            database.getPs().executeUpdate();
+            database.getConnection().commit();
+        }
+
+    }
+
+
+//    public static void selectPaymentPlan(Customer customer, Database database) throws SQLException {
+//
+//        String sql;
+//
+//        sql = "select id, credit_id, payment_date , base_amount, interest_amount, total_amount from monthly_payment";
+//
+//        database.setPs(database.getConnection().prepareStatement(sql));
+//        database.setRs(database.getPs().executeQuery());
+//
+//        List<MonthlyPayment> paymentPlan= new ArrayList<>();
+//
+//        while (database.getRs().next()) {
+//            Credit credit = new Credit();
+//
+//            credit.setId(database.getRs().getInt("id"));
+//            credit.setHomePrice(database.getRs().getBigDecimal("home_price"));
+//            credit.setInitialPayment(database.getRs().getBigDecimal("initial_payment"));
+//            credit.setCreditAmount(database.getRs().getBigDecimal("credit_amount"));
+//            credit.setInterestAmount(database.getRs().getBigDecimal("interest_amount"));
+//            credit.setFirstPaymentDate(database.getRs().getDate("first_payment_date").toLocalDate());
+//            credit.setLastPaymentDate(database.getRs().getDate("last_payment_date").toLocalDate());
+//            credit.setActionDate(database.getRs().getDate("action_date").toLocalDate());
+//
+//
+//            credits.add(credit);
+//
+//            database.getConnection().commit();
+//
+//            System.out.println(credit);
+//        }
+//    }
 
 }
