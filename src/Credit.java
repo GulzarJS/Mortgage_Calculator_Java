@@ -1,4 +1,6 @@
 import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -10,6 +12,7 @@ public class Credit {
 
 
     private int id;
+    private int customerId;
     private BigDecimal homePrice;
     private BigDecimal initialPayment;
     private BigDecimal creditAmount;
@@ -17,13 +20,19 @@ public class Credit {
     private LocalDate firstPaymentDate;
     private LocalDate lastPaymentDate;
     private LocalDate actionDate;
-
     private int creditYear;
-
-
     private final int interestPercentage = 8;
     private final int maxCreditYear = 25;
     private final BigDecimal maxCreditAmount = new BigDecimal(150000);
+    private Customer customer;
+
+    public Credit(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
 
     public Credit() {
     }
@@ -33,8 +42,8 @@ public class Credit {
     }
 
     public void setCreditYear(Customer customer) {
-        if(customer.getRestWorkYear() > maxCreditYear){
-            this.creditYear = maxCreditYear - customer.getRestWorkYear();
+        if(customer.getRestWorkYear() < maxCreditYear){
+            this.creditYear = customer.getRestWorkYear();
         }else{
             this.creditYear = maxCreditYear;
         }
@@ -57,8 +66,16 @@ public class Credit {
         setInitialPayment();
         setInterestAmount();
         setCreditAmount();
+        setActionDate();
     }
 
+    public int getCustomerId() {
+        return customerId;
+    }
+
+    public void setCustomerId(int customerId) {
+        this.customerId = customerId;
+    }
     public BigDecimal getInitialPayment() {
         return initialPayment;
     }
@@ -123,7 +140,7 @@ public class Credit {
     }
 
     public void setLastPaymentDate() {
-        this.lastPaymentDate = firstPaymentDate.plusYears(creditYear);
+        this.lastPaymentDate = firstPaymentDate.plusYears(getCreditYear());
     }
 
     public LocalDate getActionDate() {
@@ -151,29 +168,42 @@ public class Credit {
         return maxCreditAmount;
     }
 
-    public List monthlyPaymentPlan(Credit credit, Database database) throws SQLException {
+    public List monthlyPaymentPlan() throws SQLException {
         List<MonthlyPayment> paymentPlan = new ArrayList<>();
 
-        int nbMonth= 12 * credit.getCreditYear();
+        int nbMonth= 12 * this.getCreditYear();
 
-        BigDecimal baseAmount = credit.getCreditAmount().divide(BigDecimal.valueOf(nbMonth));
-        BigDecimal interestAmount = credit.getInterestAmount().divide(BigDecimal.valueOf(nbMonth));
+        BigDecimal baseAmount = this.getCreditAmount().divide(BigDecimal.valueOf(nbMonth)).round(new MathContext(2, RoundingMode.HALF_UP));
+        BigDecimal interestAmount = this.getInterestAmount().divide(BigDecimal.valueOf(nbMonth)).round(new MathContext(2,RoundingMode.HALF_UP));
         BigDecimal totalAmount = baseAmount.add(interestAmount);
+
 
 
 
         for (int i = 0; i < nbMonth ; i++) {
 
-            MonthlyPayment payment = new MonthlyPayment(DatabaseQueries.getCreditId(credit,database),
-                                        credit.getFirstPaymentDate().plusMonths(i),
+            MonthlyPayment payment = new MonthlyPayment(DatabaseQueries.getCreditId(this.customer),
+                                        this.getFirstPaymentDate().plusMonths(i),
                                         baseAmount, interestAmount, totalAmount);
 
+            System.out.println(this.getFirstPaymentDate().plusMonths(i));
             paymentPlan.add(payment);
         }
 
         return paymentPlan;
     }
 
-
-
+    @Override
+    public String toString() {
+        return "Credit{" +
+                "id=" + id +
+                ", customerId=" + customerId +
+                ", homePrice=" + homePrice +
+                ", initialPayment=" + initialPayment +
+                ", creditAmount=" + creditAmount +
+                ", interestAmount=" + interestAmount +
+                ", firstPaymentDate=" + firstPaymentDate +
+                ", lastPaymentDate=" + lastPaymentDate +
+                ", actionDate=" + actionDate + '}';
+    }
 }

@@ -73,4 +73,16 @@ public class MonthlyPayment {
     public void setTotalAmount(BigDecimal totalAmount) {
         this.totalAmount = totalAmount;
     }
+
+    @Override
+    public String toString() {
+        return "MonthlyPayment{" +
+                "id=" + id +
+                ", creditId=" + creditId +
+                ", paymentDate=" + paymentDate +
+                ", baseAmount=" + baseAmount +
+                ", interestAmount=" + interestAmount +
+                ", totalAmount=" + totalAmount +
+                '}';
+    }
 }
