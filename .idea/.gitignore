@@ -3,9 +3,8 @@
 /workspace.xml
 # Datasource local storage ignored files
 /../../../../../../../:\Users\Gulzar Seferli\Desktop\ITCITY_JAVA10\Mortgage_Calculator_Java\.idea/dataSources/
+C:\Users\Gulzar Seferli\Desktop\ITCITY_JAVA10\Mortgage_Calculator_Java\src\connectiondetails
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
 
-
-src/database/DatabaseConnection.java

@@ -1,4 +1,4 @@
-package database;
+package connectiondetails;
 
 /**
  * Created by Gulzar Safar on 9/25/2020
