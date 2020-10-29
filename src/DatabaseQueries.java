@@ -302,19 +302,25 @@ public class DatabaseQueries {
 
             List<MonthlyPayment> paymentPlan = credit.monthlyPaymentPlan();
 
+
             ListIterator<MonthlyPayment> paymentPlanIterator = paymentPlan.listIterator();
+
+
 
             while (paymentPlanIterator.hasNext()) {
                 database.setPs(database.getConnection().prepareStatement(sql));
 
-                database.getPs().setInt(1, DatabaseQueries.getCreditId(credit.getCustomer()));
-                database.getPs().setDate(2, Date.valueOf(paymentPlanIterator.next().getPaymentDate()));
-                database.getPs().setBigDecimal(3, paymentPlanIterator.next().getBaseAmount());
-                database.getPs().setBigDecimal(4, paymentPlanIterator.next().getInterestAmount());
-                database.getPs().setBigDecimal(5, paymentPlanIterator.next().getTotalAmount());
+                MonthlyPayment temp = paymentPlanIterator.next();
 
-                database.getPs().executeUpdate();
-                database.getConnection().commit();
+                database.getPs().setInt(1, DatabaseQueries.getCreditId(credit.getCustomer()));
+                database.getPs().setDate(2, Date.valueOf(temp.getPaymentDate()));
+                database.getPs().setBigDecimal(3, temp.getBaseAmount());
+                database.getPs().setBigDecimal(4, temp.getInterestAmount());
+                database.getPs().setBigDecimal(5, temp.getTotalAmount());
+
+
+            database.getPs().executeUpdate();
+            database.getConnection().commit();
 
             }
         }catch (SQLException e) {

@@ -173,8 +173,8 @@ public class Credit {
 
         int nbMonth= 12 * this.getCreditYear();
 
-        BigDecimal baseAmount = this.getCreditAmount().divide(BigDecimal.valueOf(nbMonth)).round(new MathContext(2, RoundingMode.HALF_UP));
-        BigDecimal interestAmount = this.getInterestAmount().divide(BigDecimal.valueOf(nbMonth)).round(new MathContext(2,RoundingMode.HALF_UP));
+        BigDecimal baseAmount = this.getCreditAmount().divide(BigDecimal.valueOf(nbMonth),2,RoundingMode.HALF_EVEN);
+        BigDecimal interestAmount = this.getInterestAmount().divide(BigDecimal.valueOf(nbMonth),2,RoundingMode.HALF_EVEN);
         BigDecimal totalAmount = baseAmount.add(interestAmount);
 
 
@@ -186,7 +186,6 @@ public class Credit {
                                         this.getFirstPaymentDate().plusMonths(i),
                                         baseAmount, interestAmount, totalAmount);
 
-            System.out.println(this.getFirstPaymentDate().plusMonths(i));
             paymentPlan.add(payment);
         }
 
