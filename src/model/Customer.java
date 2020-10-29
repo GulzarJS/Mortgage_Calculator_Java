@@ -1,3 +1,4 @@
+package model;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -85,7 +86,7 @@ public class Customer {
 
     @Override
     public String toString() {
-        return "Customer{" +
+        return "model.Customer{" +
                 "id=" + getId() +
                 ", name='" + getName() + '\'' +
                 ", surName='" + getSurName() + '\'' +

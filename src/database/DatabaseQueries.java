@@ -1,3 +1,8 @@
+package database;
+
+import model.Credit;
+import model.Customer;
+import model.MonthlyPayment;
 
 import java.sql.Date;
 import java.sql.SQLException;

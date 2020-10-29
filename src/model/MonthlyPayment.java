@@ -1,4 +1,4 @@
-
+package model;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -76,7 +76,7 @@ public class MonthlyPayment {
 
     @Override
     public String toString() {
-        return "MonthlyPayment{" +
+        return "model.MonthlyPayment{" +
                 "id=" + id +
                 ", creditId=" + creditId +
                 ", paymentDate=" + paymentDate +

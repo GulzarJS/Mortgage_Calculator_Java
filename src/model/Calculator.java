@@ -1,8 +1,12 @@
+package model;
+
+import database.DatabaseQueries;
+import model.Credit;
+import model.Customer;
+
 import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.List;
-import java.util.ListIterator;
 import java.util.Scanner;
 
 
@@ -54,7 +58,7 @@ public class Calculator {
             DatabaseQueries.insertCredit(credit);
             DatabaseQueries.insertPaymentPlan(credit);
 
-            System.out.println("Customer:");
+            System.out.println("model.Customer:");
             DatabaseQueries.selectExactCustomer(customer);
             System.out.println("Mortgage:");
             DatabaseQueries.selectCreditForCustomer(customer);

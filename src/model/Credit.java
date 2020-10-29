@@ -1,5 +1,8 @@
+package model;
+
+import database.DatabaseQueries;
+
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.math.RoundingMode;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -194,7 +197,7 @@ public class Credit {
 
     @Override
     public String toString() {
-        return "Credit{" +
+        return "model.Credit{" +
                 "id=" + id +
                 ", customerId=" + customerId +
                 ", homePrice=" + homePrice +
