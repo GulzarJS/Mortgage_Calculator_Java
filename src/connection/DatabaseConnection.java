@@ -1,4 +1,4 @@
-package connectiondetails;
+package connection;
 
 /**
  * Created by Gulzar Safar on 9/25/2020
